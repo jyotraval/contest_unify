@@ -48,14 +48,14 @@ def classify_contests(contests,limit=10):
             status='Upcoming'
         else:
             status = 'Done'
-
-        classified.append({
-            'title': contest['title'],
-            'startTime': start,
-            'duration': duration,
-            'status': status
-        })
-    return classified[:limit]
+        if status=='Upcoming':
+            classified.append({
+                'title': contest['title'],
+                'startTime': start,
+                'duration': duration,
+                'status': status
+            })
+    return classified
 
 
 # Main fucntion to excute the sccript
