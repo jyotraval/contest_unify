@@ -55,6 +55,8 @@ def classify_contests(contests,limit=10):
                 'duration': duration,
                 'status': status
             })
+        else:
+            break
     return classified
 
 
