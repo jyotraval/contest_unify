@@ -57,7 +57,7 @@ def classify_contests(contests,limit=10):
             })
         else:
             break
-    return classified
+    return tuple(classified)
 
 
 # Main fucntion to excute the sccript
