@@ -29,8 +29,11 @@ def normalize_time(timestamp):
 
 
 import codeforce_api_data
+import leetcode_api_data
 
 codeforce_data= codeforce_api_data.fetch_api_data() # tuple of contest data --> dictionary
+leetcode_data= leetcode_api_data.fetch_leetcode_contests() # tuple of contest data --> dictionary
+
 codeforce_db=dict()
 for i in codeforce_data:
     phase=i['phase']
@@ -42,3 +45,9 @@ for i in codeforce_data:
 print(codeforce_db)
 # print(len(codeforce_data)==len(codeforce_db))
 
+leetcode_db=dict()
+for i in leetcode_data:
+    time_temp=normalize_time(i['startTime'])
+    leetcode_db[i['title']]=time_temp
+
+print(leetcode_db)
