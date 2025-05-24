@@ -2,6 +2,7 @@
 import requests
 from time import time
 from datetime import datetime, UTC
+from zoneinfo import ZoneInfo
 
 # fecth leetCode contsts data usng GraphQL API
 def fetch_leetcode_contests(url='https://leetcode.com/graphql',limit=10):
@@ -45,7 +46,7 @@ def classify_contests(contests,limit=10):
         # Check if contest is upcoming/finished
         #if curretnt time is less than start time then its finished
         if current_time<start: #upcoming
-            dt = datetime.fromtimestamp(start, UTC)
+            dt =datetime.fromtimestamp(start, ZoneInfo("Asia/Kolkata"))
             time_tuple = (
                 dt.year,
                 dt.month,
@@ -75,7 +76,7 @@ if __name__=="__main__":
     # st=time.time()
     # contests_status = classify_contests(contests,10)
     # print(contests_status,time.time()-st)
-    res = fetch_leetcode_contests()
-    for item in res:
-        print(item)
+    res=fetch_leetcode_contests()
+    for i in res:
+        print(i)
 
