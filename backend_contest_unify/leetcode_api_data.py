@@ -1,6 +1,7 @@
 # imprt the requred libbrary
 import requests
 from time import time
+from datetime import datetime, UTC
 
 # fecth leetCode contsts data usng GraphQL API
 def fetch_leetcode_contests(url='https://leetcode.com/graphql',limit=10):
@@ -43,20 +44,22 @@ def classify_contests(contests,limit=10):
         end=start+duration
         # Check if contest is upcoming/finished
         #if curretnt time is less than start time then its finished
-        #if not then its upcming
-        if current_time<start:
-            status='Upcoming'
-        else:
-            status = 'Done'
-        if status=='Upcoming':
-            classified.append({
-                'title': contest['title'],
-                'startTime': start,
-                'duration': duration,
-                'status': status
-            })
-        else:
+        if current_time<start: #upcoming
+            dt = datetime.fromtimestamp(start, UTC)
+            time_tuple = (
+                dt.year,
+                dt.month,
+                dt.day,
+                dt.hour,
+                dt.minute,
+                dt.second,
+                dt.strftime('%A') #weekday
+            )
+            classified.append((contest['title'], time_tuple))
+
+        if len(classified) >= limit:
             break
+            
     return tuple(classified)
 
 
@@ -65,7 +68,6 @@ if __name__=="__main__":
     url='https://leetcode.com/graphql'
     # data = fetch_leetcode_contests(url)
     # print(data)
-    res = fetch_leetcode_contests(url)
     # print(data)
     # contests = data['data']['allContests']
     # print (contests)
@@ -73,8 +75,7 @@ if __name__=="__main__":
     # st=time.time()
     # contests_status = classify_contests(contests,10)
     # print(contests_status,time.time()-st)
-    for c in res:
-        if c['status'].lower()=='upcoming':
-            print(f"{c['title']} - status:{c['status']}-",c)
-        else:
-            break
+    res = fetch_leetcode_contests()
+    for item in res:
+        print(item)
+
