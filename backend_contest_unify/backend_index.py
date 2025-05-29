@@ -313,9 +313,9 @@ class ContestDatabase:
                     ''')
                     rows = cursor.fetchall()
                     for row in rows:
-                        # print(row[-3],row[-2], row[-1], sep='\t')
-                        pass
+                        print(row[-3],row[-2], row[-1], sep='\t')
                     logger.info(f"{len(rows)} contest records retrieved from the database and displayed.")
+                    
                 conn.commit()
         except sqlite3.Error as e:
             logger.error(f"Database operation error: {e}")
