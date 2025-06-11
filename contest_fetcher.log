@@ -1,8 +1,0 @@
-2025-06-11 10:41:35,756 - INFO - Fetched 6 Codeforces contests
-2025-06-11 10:41:36,247 - INFO - Fetched 2 LeetCode contests
-2025-06-11 10:41:36,810 - INFO - Fetched 2 CodeChef contests
-2025-06-11 10:41:36,948 - INFO - Fetched 4 HackerEarth contests
-2025-06-11 10:41:37,206 - INFO - Fetched 8 AtCoder contests
-2025-06-11 10:41:37,247 - INFO - Initialized contests table
-2025-06-11 10:41:37,251 - INFO - Stored contest data in database
-2025-06-11 10:41:37,264 - INFO - 22 contest records retrieved from the database and displayed.
