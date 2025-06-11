@@ -350,6 +350,20 @@ def contest_site_info() -> None:
     """Print available contest sites."""
     print(('codeforce', 'leetcode', 'codechef', 'hackearth', 'atcoder'))
 
+
+def print_contest() -> None:
+    with sqlite3.connect('contest.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+                        SELECT site, contest_title, event_time, weekday, unix_time_stamp
+                        FROM contests
+                        ORDER BY unix_time_stamp ASC;
+                    ''')
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row[-3],row[-2], row[-1], sep='\t')
+        logger.info(f"{len(rows)} contest records retrieved from the database and displayed.")
+        conn.commit()
 def main():
     try:
         # step 1.. fetch contest data from all platforms
@@ -359,16 +373,16 @@ def main():
         db = ContestDatabase()
 
          # step 3.. store the fetched data in the database
-        db.store_contests(data, print_data_global) # print_data=True means it will also print stored contests to the console
+        db.store_contests(data)
 
     except ContestFetcherError as e:
         logger.error(f"Main execution error: {e}")
         print(f"Error: {e}")
 
-print_data_global=False
 
 if __name__ == "__main__":
     # This block runs only if the script is executed directly
-    print_data_global=True
     main()
+    print_contest()
+    
     
