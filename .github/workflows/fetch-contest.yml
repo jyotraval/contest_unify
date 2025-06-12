@@ -23,15 +23,3 @@ jobs:
       - name: Run backend_index.py
         working-directory: ./backend_contest_unify
         run: python backend_index.py
-
-      - name: Upload contest.db
-        uses: actions/upload-artifact@v4
-        with:
-          name: contest_database
-          path: backend_contest_unify/contest.db
-
-      - name: Upload contest_fetcher.log
-        uses: actions/upload-artifact@v4
-        with:
-          name: fetcher_logs
-          path: backend_contest_unify/contest_fetcher.log
