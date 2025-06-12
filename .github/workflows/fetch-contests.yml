@@ -2,7 +2,8 @@ name : Fetch Contest and Update DB
 
 on :
     schedule:
-    - corn '*/30 * * * *' #every 30 mins
+        - cron: "*/10 * * * *"
+    workflow_dispatch:
 
 jobs:
   fetch_contests:
