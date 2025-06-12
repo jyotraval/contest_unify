@@ -10,11 +10,13 @@ import psycopg2
 from dotenv import load_dotenv
 import os
 
+log_path = os.path.join(os.path.dirname(__file__), 'contest_fetcher.log')
+
 # configure logging/ audits
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[logging.FileHandler('contest_fetcher.log'), logging.StreamHandler()]
+    handlers=[logging.FileHandler(log_path,mode='a'), logging.StreamHandler()]
 )
 # ex 2025-05-28 19:45:12,345 - INFO - Fetched 10 contests
 # levels 
@@ -406,6 +408,11 @@ def main():
     except ContestFetcherError as e:
         logger.error(f"Main execution error: {e}")
         print(f"Error: {e}")
+    
+    finally:
+        # Always flush logs, even if an error occurred
+        for handler in logger.handlers:
+            handler.flush()
 
 
 if __name__ == "__main__":
