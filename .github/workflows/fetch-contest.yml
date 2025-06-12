@@ -20,16 +20,21 @@ jobs:
 
     - name: install dependencies
       run: pip install -r requirements.txt
+    
+    - name: Create .env file from GitHub Secrets
+      run: |
+        echo "user=${{ secrets.USER }}" >> backend_contest_unify/.env
+        echo "password=${{ secrets.PASSWORD }}" >> backend_contest_unify/.env
+        echo "host=${{ secrets.HOST }}" >> backend_contest_unify/.env
+        echo "port=${{ secrets.PORT }}" >> backend_contest_unify/.env
+        echo "dbname=${{ secrets.DBNAME }}" >> backend_contest_unify/.env
 
     - name: Run backend_index.py
       working-directory: ./backend_contest_unify
       run: python backend_index.py
-
-    - name: Upload contest.db
-      uses: actions/upload-artifact@v4
-      with:
-        name: contest_database
-        path: backend_contest_unify/contest.db
+    
+    - name: Show contest_fetcher.log
+      run: cat backend_contest_unify/contest_fetcher.log || echo "Log file not found"
 
     - name: Upload contest_fetcher.log
       uses: actions/upload-artifact@v4
