@@ -1,38 +1,37 @@
-name : Fetch Contest and Update DB
+name: Fetch Contest and Update DB
 
-on :
-    schedule:
-        - cron: "*/10 * * * *"
-    workflow_dispatch:
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
 
 jobs:
   fetch_contests:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: install dependencies
-      run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: Run backend_index.py
-      working-directory: ./backend_contest_unify
-      run: python backend_index.py
+      - name: Run backend_index.py
+        working-directory: ./backend_contest_unify
+        run: python backend_index.py
 
-    - name: Upload contest.db
-      uses: actions/upload-artifact@v3
-      with:
-        name: contest_database
-        path: backend_contest_unify/contest.db
+      - name: Upload contest.db
+        uses: actions/upload-artifact@v4
+        with:
+          name: contest_database
+          path: backend_contest_unify/contest.db
 
-    - name: Upload contest_fetcher.log
-      uses: actions/upload-artifact@v3
-      with:
-        name: fetcher_logs
-        path: backend_contest_unify/contest_fetcher.log
+      - name: Upload contest_fetcher.log
+        uses: actions/upload-artifact@v4
+        with:
+          name: fetcher_logs
+          path: backend_contest_unify/contest_fetcher.log
