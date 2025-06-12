@@ -14,3 +14,34 @@
 2025-05-30 00:10:17,272 - INFO - Initialized contests table
 2025-05-30 00:10:17,275 - INFO - Stored contest data in database
 2025-05-30 00:10:17,276 - INFO - 24 contest records retrieved from the database and displayed.
+2025-06-12 17:30:10,111 - INFO - Fetched 6 Codeforces contests
+2025-06-12 17:30:10,827 - INFO - Fetched 2 LeetCode contests
+2025-06-12 17:30:11,643 - INFO - Fetched 2 CodeChef contests
+2025-06-12 17:30:11,917 - INFO - Fetched 5 HackerEarth contests
+2025-06-12 17:30:12,304 - INFO - Fetched 8 AtCoder contests
+2025-06-12 17:30:12,705 - INFO - Initialized contests table
+2025-06-12 17:30:13,450 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:30:42,381 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:31:51,857 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:33:02,372 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:34:19,432 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:36:18,268 - ERROR - Unexpected error in print_contest(): '<=' not supported between instances of 'str' and 'int'
+2025-06-12 17:36:31,038 - ERROR - Unexpected error in print_contest(): '<' not supported between instances of 'str' and 'int'
+2025-06-12 17:36:55,890 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:37:06,420 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:37:19,275 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:37:32,226 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:37:46,361 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:38:04,997 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-12 17:38:58,572 - ERROR - Unexpected error in print_contest(): connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-06-12 17:39:14,185 - INFO - Fetched 6 Codeforces contests
+2025-06-12 17:39:14,963 - INFO - Fetched 2 LeetCode contests
+2025-06-12 17:39:16,133 - INFO - Fetched 2 CodeChef contests
+2025-06-12 17:39:16,350 - INFO - Fetched 5 HackerEarth contests
+2025-06-12 17:39:16,607 - INFO - Fetched 8 AtCoder contests
+2025-06-12 17:39:16,978 - INFO - Initialized contests table
+2025-06-12 17:39:17,702 - INFO - 23 contest records retrieved from the database and displayed.

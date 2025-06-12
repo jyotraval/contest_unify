@@ -1,7 +1,6 @@
 import requests                                     # https reqs for APIs
 from datetime import datetime, timedelta,timezone   # date and time manipulation
-from bs4 import BeautifulSoup                       # web scraping, webpage extraition
-import sqlite3                                      # database manipuation    
+from bs4 import BeautifulSoup                       # web scraping, webpage extraition 
 import logging                                      # for logging errors/info/debug messages
 from typing import List, Tuple, Dict
 
@@ -238,24 +237,16 @@ class ContestFetcher:
 # Load environment variables
 load_dotenv()
 
+USER = os.getenv("user")
+PASSWORD = os.getenv("password")
+HOST = os.getenv("host")
+PORT = os.getenv("port")
+DBNAME = os.getenv("dbname")
 
 class ContestDatabase:
     def __init__(self):
-        self.connection = self._connect()
         self._initialize_database()
-    
-    def _connect(self):
-        try:
-            return psycopg2.connect(
-                user=os.getenv("DB_USER"),
-                password=os.getenv("DB_PASSWORD"),
-                host=os.getenv("DB_HOST"),
-                port=os.getenv("DB_PORT"),
-                dbname=os.getenv("DB_NAME")
-            )
-        except Exception as e:
-            raise Exception(f"Failed to connect to database: {e}")
-    
+
     def time_tuple_to_unix(self, year, month, day, hr, minute, sec):
         # Define the offset for +5:30
         offset = timedelta(hours=5, minutes=30)
@@ -273,8 +264,14 @@ class ContestDatabase:
     def _initialize_database(self) -> None:
         """Initialize the contests table."""
         try:
-            #connect with sqlite/ databse
-            with self.connection.cursor() as cursor:
+            connection = psycopg2.connect(
+                user=USER,
+                password=PASSWORD,
+                host=HOST,
+                port=PORT,
+                dbname=DBNAME
+            )
+            with connection.cursor() as cursor:
                 # site | contest_title | event_time | weekday | unix_time_stamp
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS contests (
@@ -285,16 +282,23 @@ class ContestDatabase:
                     unix_time_stamp BIGINT NOT NULL
                     );
                 ''')
-                self.connection.commit()
+                connection.commit()
                 logger.info("Initialized contests table")
                 
-        except sqlite3.Error as e:
-            logger.error(f"Database initialization error: {e}")
-            raise ContestFetcherError(f"Database error: {e}")
+        except Exception as e:
+            logger.error(f"Failed to initialize table: {e}")
+            raise ContestFetcherError(f"Failed to initialize table: {e}")
 
     def store_contests(self, data_db: Dict[str, List[Tuple]]) -> None:
         try:
-            with self.connection.cursor() as cursor:
+            connection = psycopg2.connect(
+                user=os.getenv("user"),
+                password=os.getenv("password"),
+                host=os.getenv("host"),
+                port=os.getenv("port"),
+                dbname=os.getenv("dbname")
+            )
+            with connection.cursor() as cursor:
 
                 cursor.execute('DELETE FROM contests;')
                     # deleteing all existing records from the table
@@ -321,16 +325,14 @@ class ContestDatabase:
                             VALUES (%s, %s, %s, %s, %s)
                         ''', (site, title, event_time, weekday, unix_time))
                 
-                self.connection.commit()
+                connection.commit()
 
                 
-        except sqlite3.Error as e:
-            logger.error(f"Database operation error: {e}")
-            raise ContestFetcherError(f"Database error: {e}")
+        except Exception as e:
+            logger.error(f"Failed to store contest data: {e}")
+            raise ContestFetcherError(f"Data storage error: {e}")
         
 
-    def close(self):
-        self.connection.close()
 
 def fetch_all_contests( codeforce: bool=False,leetcode: bool=False,codechef: bool=False,
                         hackearth: bool=False, atcoder: bool=False,all: bool=True) -> Dict[str, List[Tuple]]:
@@ -364,23 +366,28 @@ def contest_site_info() -> None:
 
 def print_contest() -> None:
     try:
-        with sqlite3.connect('contest.db') as conn:
-            cursor = conn.cursor()
-            cursor.execute('''
-                            SELECT site, contest_title, event_time, weekday, unix_time_stamp
-                            FROM contests
-                            ORDER BY unix_time_stamp ASC;
-                        ''')
-            rows = cursor.fetchall()
-            for row in rows:
-                site, contest_title, event_time, weekday, unix_time_stamp = row
-                # print(row[-3],row[-2], row[-1], sep='\t')
-                print(f"{site}\t{contest_title}\t{event_time}\t{weekday}\t{unix_time_stamp}")
-            logger.info(f"{len(rows)} contest records retrieved from the database and displayed.")
-            conn.commit()
+        connection = psycopg2.connect(
+                user=USER,
+                password=PASSWORD,
+                host=HOST,
+                port=PORT,
+                dbname=DBNAME
+            )
+        cursor = connection.cursor()
+        cursor.execute('''
+                       SELECT site, contest_title, event_time, weekday, unix_time_stamp
+                       FROM contests
+                       ORDER BY unix_time_stamp ASC;
+                       ''')
+        rows = cursor.fetchall()
+        for row in rows:
+            site, contest_title, event_time, weekday, unix_time_stamp = row
+            # print(row[-3],row[-2], row[-1], sep='\t')
+            print(f"{site:<10}\t{event_time}\t{weekday[:3]}\t{unix_time_stamp}\t{contest_title}")
+        logger.info(f"{len(rows)} contest records retrieved from the database and displayed.")
+        cursor.close()
+        connection.close()
         
-    except sqlite3.Error as e:
-        logger.error(f"Database error while fetching contest data: {e}")
     except Exception as e:
         logger.error(f"Unexpected error in print_contest(): {e}")
 
@@ -395,7 +402,6 @@ def main():
 
          # step 3.. store the fetched data in the database
         db.store_contests(data)
-        db.close()
 
     except ContestFetcherError as e:
         logger.error(f"Main execution error: {e}")
@@ -405,6 +411,6 @@ def main():
 if __name__ == "__main__":
     # This block runs only if the script is executed directly
     main()
-    # print_contest()
+    print_contest()
     
     
