@@ -352,18 +352,27 @@ def contest_site_info() -> None:
 
 
 def print_contest() -> None:
-    with sqlite3.connect('contest.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute('''
-                        SELECT site, contest_title, event_time, weekday, unix_time_stamp
-                        FROM contests
-                        ORDER BY unix_time_stamp ASC;
-                    ''')
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row[-3],row[-2], row[-1], sep='\t')
-        logger.info(f"{len(rows)} contest records retrieved from the database and displayed.")
-        conn.commit()
+    try:
+        with sqlite3.connect('contest.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                            SELECT site, contest_title, event_time, weekday, unix_time_stamp
+                            FROM contests
+                            ORDER BY unix_time_stamp ASC;
+                        ''')
+            rows = cursor.fetchall()
+            for row in rows:
+                site, contest_title, event_time, weekday, unix_time_stamp = row
+                # print(row[-3],row[-2], row[-1], sep='\t')
+                print(f"{site}\t{contest_title}\t{event_time}\t{weekday}\t{unix_time_stamp}")
+            logger.info(f"{len(rows)} contest records retrieved from the database and displayed.")
+            conn.commit()
+        
+    except sqlite3.Error as e:
+        logger.error(f"Database error while fetching contest data: {e}")
+    except Exception as e:
+        logger.error(f"Unexpected error in print_contest(): {e}")
+
 def main():
     try:
         # step 1.. fetch contest data from all platforms
@@ -383,6 +392,6 @@ def main():
 if __name__ == "__main__":
     # This block runs only if the script is executed directly
     main()
-    print_contest()
+    # print_contest()
     
     
