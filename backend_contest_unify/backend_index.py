@@ -327,6 +327,16 @@ class ContestDatabase:
                             VALUES (%s, %s, %s, %s, %s)
                         ''', (site, title, event_time, weekday, unix_time))
                 
+                if True: # using if block just to distigues. -? no logic.
+                    cursor.execute('''
+                                UPDATE contest_meta_refresh 
+                                SET
+                                    human_read=now(),
+                                    epoch_unix=FLOOR(EXTRACT(EPOCH FROM now()))::bigint
+                                WHERE modifier_flag=1;''')
+                    
+                    logger.info("Updated `contest_meta_refresh` with latest `contests` fetch timestamp.")
+
                 connection.commit()
 
                 
@@ -342,24 +352,38 @@ def fetch_all_contests( codeforce: bool=False,leetcode: bool=False,codechef: boo
 
     fetcher = ContestFetcher() # create instance of the fetcher
     data_db = {} # dict to store results
-    try:
-        # if `all` is True or the individual site flag is True
-        # fetch contests from that platform and store them in the dictionary.
 
-        if all or codeforce:
+    if all or codeforce:
+        try:
             data_db['codeforce'] = fetcher.fetch_codeforce_contests()
-        if all or leetcode:
+        except ContestFetcherError as e:
+            logger.error(f"Error fetching Codeforces contests: {e}")
+
+    if all or leetcode:
+        try:
             data_db['leetcode'] = fetcher.fetch_leetcode_contests()
-        if all or codechef:
+        except ContestFetcherError as e:
+            logger.error(f"Error fetching LeetCode contests: {e}")
+
+    if all or codechef:
+        try:
             data_db['codechef'] = fetcher.fetch_codechef_contests()
-        if all or hackearth:
+        except ContestFetcherError as e:
+            logger.error(f"Error fetching CodeChef contests: {e}")
+
+    if all or hackearth:
+        try:
             data_db['hackearth'] = fetcher.fetch_hackerearth_contests()
-        if all or atcoder:
+        except ContestFetcherError as e:
+            logger.error(f"Error fetching HackerEarth contests: {e}")
+
+    if all or atcoder:
+        try:
             data_db['atcoder'] = fetcher.fetch_atcoder_contests()
-        return data_db
-    except ContestFetcherError as e:
-        logger.error(f"Error fetching contests: {e}")
-        raise
+        except ContestFetcherError as e:
+            logger.error(f"Error fetching AtCoder contests: {e}")
+    
+    return data_db
 
 def contest_site_info() -> None:
     """Print available contest sites."""
