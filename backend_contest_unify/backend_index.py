@@ -78,7 +78,7 @@ class ContestFetcher:
             logger.error(f"Failed to fetch Codeforces contests: {e}")
             raise ContestFetcherError(f"Codeforces API error: {e}")
     
-    def fetch_leetcode_contests(self, limit: int = 2) -> List[Tuple[str, Tuple]]:
+    def fetch_leetcode_contests(self, limit: int = 10) -> List[Tuple[str, Tuple]]:
         # limit is set to 2 cause weekly and biweeks are only contests 
         try:
             headers = {'Content-Type': 'application/json', 
@@ -111,7 +111,7 @@ class ContestFetcher:
             logger.error(f"Failed to fetch LeetCode contests: {e}")
             raise ContestFetcherError(f"LeetCode API error: {e}")
 
-    def fetch_codechef_contests(self, limit: int = 2) -> List[Tuple[str, Tuple]]:
+    def fetch_codechef_contests(self, limit: int = 10) -> List[Tuple[str, Tuple]]:
         # api alredy retues only 2 contest but for flexibility
         try:
             # get req to get api contest data data
