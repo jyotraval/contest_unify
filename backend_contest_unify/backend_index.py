@@ -277,7 +277,7 @@ class ContestDatabase:
                 # site | contest_title | event_time | weekday | unix_time_stamp
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS contests (
-                    site VARCHAR(32) NOT NULL,
+                    site VARCHAR(63) NOT NULL,
                     contest_title TEXT NOT NULL,
                     event_time TEXT NOT NULL,
                     weekday VARCHAR(10),
@@ -355,31 +355,31 @@ def fetch_all_contests( codeforce: bool=False,leetcode: bool=False,codechef: boo
 
     if all or codeforce:
         try:
-            data_db['codeforce'] = fetcher.fetch_codeforce_contests()
+            data_db['https://codeforces.com/contests'] = fetcher.fetch_codeforce_contests()
         except ContestFetcherError as e:
             logger.error(f"Error fetching Codeforces contests: {e}")
 
     if all or leetcode:
         try:
-            data_db['leetcode'] = fetcher.fetch_leetcode_contests()
+            data_db['https://leetcode.com/contest/'] = fetcher.fetch_leetcode_contests()
         except ContestFetcherError as e:
             logger.error(f"Error fetching LeetCode contests: {e}")
 
     if all or codechef:
         try:
-            data_db['codechef'] = fetcher.fetch_codechef_contests()
+            data_db['https://www.codechef.com/contests'] = fetcher.fetch_codechef_contests()
         except ContestFetcherError as e:
             logger.error(f"Error fetching CodeChef contests: {e}")
 
     if all or hackearth:
         try:
-            data_db['hackearth'] = fetcher.fetch_hackerearth_contests()
+            data_db['https://www.hackerearth.com/challenges/'] = fetcher.fetch_hackerearth_contests()
         except ContestFetcherError as e:
             logger.error(f"Error fetching HackerEarth contests: {e}")
 
     if all or atcoder:
         try:
-            data_db['atcoder'] = fetcher.fetch_atcoder_contests()
+            data_db['https://atcoder.jp/contests/'] = fetcher.fetch_atcoder_contests()
         except ContestFetcherError as e:
             logger.error(f"Error fetching AtCoder contests: {e}")
     
