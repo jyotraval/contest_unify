@@ -282,6 +282,7 @@ class ContestDatabase:
                     event_time TEXT NOT NULL,
                     weekday VARCHAR(10),
                     unix_time_stamp BIGINT NOT NULL
+                    CONSTRAINT unique_contest_entry UNIQUE (site, contest_title, event_time)
                     );
                 ''')
                 connection.commit()
@@ -301,8 +302,10 @@ class ContestDatabase:
                 dbname=os.getenv("dbname")
             )
             with connection.cursor() as cursor:
+                
+                cursor.execute('DELETE FROM contests where unix_time_stamp>=FLOOR(EXTRACT(EPOCH FROM now()))::bigint;')
 
-                cursor.execute('DELETE FROM contests;')
+                # cursor.execute('DELETE FROM contests;')
                     # deleteing all existing records from the table
                     # Note: table does not have any primary key or dependencies, so we can safely delete all rows
                     # why --> (not fielseble for large dataset but initnally works)
@@ -325,6 +328,7 @@ class ContestDatabase:
                         cursor.execute('''
                             INSERT INTO contests (site, contest_title, event_time, weekday, unix_time_stamp)
                             VALUES (%s, %s, %s, %s, %s)
+                            ON CONFLICT (site, contest_title, event_time) DO NOTHING;
                         ''', (site, title, event_time, weekday, unix_time))
                 
                 if True: # using if block just to distigues. -? no logic.
