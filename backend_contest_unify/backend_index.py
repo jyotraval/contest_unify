@@ -281,7 +281,7 @@ class ContestDatabase:
                     contest_title TEXT NOT NULL,
                     event_time TEXT NOT NULL,
                     weekday VARCHAR(10),
-                    unix_time_stamp BIGINT NOT NULL
+                    unix_time_stamp BIGINT NOT NULL,
                     CONSTRAINT unique_contest_entry UNIQUE (site, contest_title, event_time)
                     );
                 ''')
