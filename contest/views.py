@@ -21,7 +21,7 @@ def show_supabase_contests(request):
                     'time': row[2],
                     'weekday': row[3]
                 })
-                print("Contests from Supabase:", contests)
+                # print("Contests from Supabase:", contests)
             cursor.close()
         except Exception as e:
             print("Error fetching from Supabase:", e)

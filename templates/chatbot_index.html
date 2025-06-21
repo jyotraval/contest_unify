@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>leet-lens Jyotr :)</title>
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
+    // convert Markdown to HTML before passing it to .innerHTML
+</script>
+<body>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+
+        </div>
+        <div class="input-area">
+            <input type="text" id="message" placeholder="Type your message..." />
+            <select id="site">
+                <option value="leetcode">s1 leetcode</option>
+                <option value="codeforce">s2 codeforce</option>
+                <option value="site3">s3</option>
+            </select>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM refrencec document object model
+        const messageInput = document.getElementById('message');
+        const chatBox = document.getElementById('chat-box');
+
+        async function sendMessage() {
+            const userMessage = messageInput.value.trim(); // getting user Input 
+            const selectedsite = document.getElementById('site').value; //site selection
+
+            if (userMessage === '') return; //stop is empty - imput khali hoy to function flow break
+
+            // display user msg - before respond comes.
+            appendMessage("You: " + userMessage);
+            messageInput.value = ''; // input box clear 
+            messageInput.focus(); // cursor back to input box
+
+            try {
+                // NOTE: await, wait for response to come then flow of code continue, without it it runs before reponse comes
+                const response = await fetch('/chatbot/', { //network reqest to url 'chatbot/'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken') // For Django CSRF protection
+                        //Sends a security token cross site request fogery 
+                    },
+                    body: JSON.stringify({
+                        message: userMessage,
+                        site: selectedsite
+                    }) // convert js object to json formate
+                });
+
+                const data = await response.json(); // Waiting for the jsaon data to finish downloading and parsing
+                if (data.reply) {
+                    // appendMessage(`[${selectedsite}] Bot: ${data.reply}`);
+
+                    //marked, marked.parse()library parses Markdown -> returns valid HTML. 
+                    const html = marked.parse(data.reply);  // Convert Markdown to HTML
+                    appendMessage(`[${selectedsite}] Bot:<br>${html}`);
+                } else {
+                    appendMessage(`[${selectedsite}] Bot: Error: ${data.error || 'No response'}`);
+                }
+            } catch (error) {
+                appendMessage(`[${selectedsite}] Bot: Error: Failed to connect to server`);
+                console.error('Error:', error);
+            }
+        }
+
+        function appendMessage(text) {
+            const msg = document.createElement('div'); // new div
+            // msg.textContent = text; // content of new div
+            msg.innerHTML = marked.parse(text); // rendering the bot msg ** and ## formatting
+            chatBox.appendChild(msg); // dynamically adding msg bubble
+            chatBox.scrollTop = chatBox.scrollHeight; //automatic scrolldown
+        }
+
+        function getCookie(name) { // name = 'csrftoken'
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') { //do browser have cookies?
+                const cookies = document.cookie.split(';'); //split cookies into a list-- ["csrftoken=abc123", "sessionid=xyz789"]
+                for (let i = 0; i < cookies.length; i++) { // illetrating to each cookie
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) { //do this cookie starts with the `name` -> 'csrftoken'
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1)); // stores csrftoken value
+                        break;
+                    }
+                }
+            }
+            return cookieValue; //returns csrftoken value
+        }
+
+        //faster interraction without need to click send button every time just `Eneter`
+        messageInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -17,8 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from ContestUnify import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('contest.urls')),  # use 'contest', not 'contests'
+    path('chatbot/',views.chatbot)
 ]
 
