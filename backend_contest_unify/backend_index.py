@@ -394,7 +394,7 @@ def contest_site_info() -> None:
     print(('codeforce', 'leetcode', 'codechef', 'hackearth', 'atcoder'))
 
 
-def print_contest() -> None:
+def print_contest():
     try:
         connection = psycopg2.connect(
                 user=USER,
