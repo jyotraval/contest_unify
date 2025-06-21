@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contest Unify</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Fira Code', monospace;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-mode {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    body.dark-mode {
+      background: #0d1117;
+      color: #c9d1d9;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .theme-toggle button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    header {
+      text-align: center;
+      padding: 1rem;
+      font-size: 2rem;
+      font-weight: bold;
+      border-bottom: 1px solid #444;
+    }
+
+    main {
+      display: flex;
+      height: calc(100% - 80px);
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .contest-list {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #444;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-y: auto;
+    }
+
+    .contest-list a {
+      display: block;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      background: #161b22;
+      border-radius: 4px;
+      color: #58a6ff;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .contest-list a:hover {
+      background: #30363d;
+    }
+
+    .chatbot-box {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #444;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+  </style>
+</head>
+<body class="dark-mode">
+  <div class="theme-toggle">
+    <button onclick="toggleTheme()" id="toggleBtn">Light Mode</button>
+  </div>
+
+  <header>Contest Unify</header>
+
+  <main>
+    <section class="contest-list">
+      {% for contest in contests %}
+        <a href="{{ contest.url }}" target="_blank">
+          {{ contest.site }} | {{ contest.contest_title }} | {{ contest.event_time }} | {{ contest.weekday }}
+        </a>
+      {% empty %}
+        <p>No upcoming contests available.</p>
+      {% endfor %}
+    </section>
+
+    <section class="chatbot-box">
+      Chatbot
+    </section>
+  </main>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.getElementById('toggleBtn');
+      const isDark = body.classList.contains('dark-mode');
+
+      body.classList.toggle('dark-mode', !isDark);
+      body.classList.toggle('light-mode', isDark);
+      btn.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+    }
+  </script>
+</body>
+</html>
