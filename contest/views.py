@@ -13,13 +13,21 @@ def show_supabase_contests(request):
                 FROM contests
                 ORDER BY unix_time_stamp ASC
             """)
+            site_logo_map = {
+        "https://www.hackerearth.com/challenges/": "hackerearth",
+        "https://atcoder.jp/contests/": "atcoder",
+        "https://www.codechef.com/contests": "codechef",
+        "https://leetcode.com/contest/": "leetcode",
+        "https://codeforces.com/contests": "codeforces"
+    }
             rows = cursor.fetchall()
             for row in rows:
                 contests.append({
                     'site': row[0],
                     'title': row[1],
-                    'time': row[2],
-                    'weekday': row[3]
+                    'time': row[2][:-6],
+                    'weekday': row[3],
+                    'domain':site_logo_map.get(row[0],'NA')
                 })
                 # print("Contests from Supabase:", contests)
             cursor.close()

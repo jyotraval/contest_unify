@@ -1,6 +1,8 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8" />
     <title>Contest Unify</title>
     <style>
@@ -12,6 +14,7 @@
         margin: 0;
         height: 100vh;
         font-family: "Segoe UI", sans-serif;
+        font-size: 0.9rem;
         color: #fff;
         display: flex;
         justify-content: center;
@@ -42,7 +45,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 0.9rem;
+        font-size: medium;
         color: #fff;
       }
 
@@ -101,8 +104,8 @@
         border-radius: 16px;
         border: 1px solid rgba(255, 255, 255, 0.06);
         /* box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), */
-          /* inset 0 0 10px rgba(255, 255, 255, 0.04), */
-          /* 0 0 12px rgba(255, 255, 255, 0.05); */
+        /* inset 0 0 10px rgba(255, 255, 255, 0.04), */
+        /* 0 0 12px rgba(255, 255, 255, 0.05); */
         backdrop-filter: blur(14px) contrast(1.1);
         -webkit-backdrop-filter: blur(14px) contrast(1.1);
         display: flex;
@@ -115,7 +118,12 @@
       .chatbox-area:hover {
         border: 1px solid rgba(255, 255, 255, 0.15);
         /* box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7), */
-          /* 0 0 18px rgba(255, 255, 255, 0.07); */
+        /* 0 0 18px rgba(255, 255, 255, 0.07); */
+      }
+
+      tr:hover {
+        transform: scale(1.02);
+        background-color: #1b1b23;
       }
 
       .contest-scroll,
@@ -174,12 +182,13 @@
       }
 
       .chat-box .user-message {
-        background-color: #2548c7;
+        background-color: #10277a;
         color: #fff;
         padding: 5px;
-        border-radius: 20px 20px 0 20px;
+        border-radius: 10px 10px 0 20px;
         max-width: 100%;
         align-self: flex-end;
+        border: 1px solid rgb(255, 255, 255);
       }
 
       .chat-box .bot-message {
@@ -189,6 +198,7 @@
         border-radius: 10px 10px 10px 0;
         max-width: 100%;
         align-self: flex-start;
+        border: 1px solid rgb(255, 255, 255);
       }
 
       .chat-box .user-message,
@@ -215,7 +225,8 @@
         .input-area input,
         .input-area select,
         .input-area button {
-          font-size: 0.8rem;
+          font-size: 0.9rem;
+
           padding: 8px;
         }
 
@@ -254,18 +265,20 @@
       .light-mode .contest-list,
       .light-mode .chatbox-area {
         background: rgba(255, 255, 255, 0.6);
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1px solid rgb(0, 0, 0);
         color: #000;
       }
 
       .light-mode .chat-box .user-message {
         background-color: #cce5ff;
         color: #000;
+        border: 1px solid rgba(255, 0, 0, 0.1);
       }
 
       .light-mode .chat-box .bot-message {
         background-color: #f1f1f1;
         color: #000;
+        border: 1px solid rgba(255, 0, 0, 0.1);
       }
 
       .light-mode .input-area input,
@@ -274,21 +287,44 @@
         color: #000;
       }
 
+      .light-mode .input-area{
+        border-top: 1px solid #aeaeae;
+      }
+
       .light-mode .input-area button {
         background-color: #ffcc00;
         color: #000;
       }
-      /* Dark mode: white links */
-body:not(.light-mode) a {
-  color: #ffffff;
-  text-decoration: underline;
-}
+      .light-mode tr:hover {
+        transform: scale(1.02);
+        background-color: #eaeaea;
+      }
 
-/* Light mode: blue links */
-body.light-mode a {
-  color: #007acc;
-  text-decoration: underline;
-}
+      .light-mode .contest-list,
+      .light-mode .chatbox-area{
+        border: 1px solid #aeaeae;
+        /* box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7), */
+        /* 0 0 18px rgba(255, 255, 255, 0.07); */
+      }
+
+      .light-mode .contest-list:hover,
+      .light-mode .chatbox-area:hover {
+        border: 1px solid rgba(0, 0, 0, 0.642);
+        /* box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7), */
+        /* 0 0 18px rgba(255, 255, 255, 0.07); */
+      }
+
+      /* Dark mode: white links */
+      body:not(.light-mode) a {
+        color: #ffffff;
+        text-decoration: underline;
+      }
+
+      /* Light mode: blue links */
+      body.light-mode a {
+        color: #007acc;
+        /* text-decoration: underline; */
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
@@ -308,6 +344,7 @@ body.light-mode a {
       <div class="main-area">
         <div class="contest-list">
           <div class="contest-scroll">
+
             <table>
               <thead>
                 <tr>
@@ -321,11 +358,16 @@ body.light-mode a {
                 {% for contest in contests %}
                 <tr>
                   <td>
-                    <a href="{{ contest.site }}" target="_blank"
-                      >{{ contest.site }}</a
-                    >
+                    <a href="{{ contest.site }}" target="_blank">
+                      {{ contest.domain }}
+                    </a>
                   </td>
-                  <td>{{ contest.title }}</td>
+                  
+                  <td>
+                    <a href="{{ contest.site }}" target="_blank" style="text-decoration: none;">
+                    {{ contest.title}}
+                  </a>
+                    </td>
                   <td>{{ contest.time }}</td>
                   <td>{{ contest.weekday }}</td>
                 </tr>
@@ -344,8 +386,8 @@ body.light-mode a {
           <div class="input-area">
             <input type="text" id="user_id" placeholder="user_id input" />
             <select id="site">
-              <option value="leetcode">Leetcode</option>
-              <option value="codeforces">odeforce</option>
+              <option value="leetcode">LeetCode</option>
+              <option value="codeforces">CodeForces</option>
             </select>
             <button onclick="sendMessage()">send ></button>
           </div>

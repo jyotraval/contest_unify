@@ -2,8 +2,8 @@ import google.generativeai as genai
 import requests
 import json
 
-import leetcode_userinfo
-import codeforces_userinfo
+import chatbot_app.leetcode_userinfo as leetcode_userinfo
+import chatbot_app.codeforces_userinfo as codeforces_userinfo
 
 from dotenv import load_dotenv
 import os

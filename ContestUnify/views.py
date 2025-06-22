@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 
-import gemini_chatbot
+import chatbot_app.gemini_chatbot as gemini_chatbot
 
 
 @ensure_csrf_cookie
@@ -15,6 +15,17 @@ def show_contests(request):
         rows = cursor.fetchall()
         columns = [col[0] for col in cursor.description]
         contests = [dict(zip(columns, row)) for row in rows]
+
+        # site_logo_map = {
+        # "https://www.hackerearth.com/challenges/": "hackerearth",
+        # "https://atcoder.jp/contests/": "atcoder",
+        # "https://www.codechef.com/contests": "codechef",
+        # "https://leetcode.com/contest/": "leetcode",
+        # "https://codeforces.com/contests": "codeforces"
+        # }
+        # for var in contests:
+        #     var['domain'] = site_logo_map.get(var['site'],'NA')
+        # # print(contests)
 
     return render(request, 'contests/index.html', {'contests': contests})
 
