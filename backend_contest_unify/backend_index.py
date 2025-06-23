@@ -303,7 +303,7 @@ class ContestDatabase:
             )
             with connection.cursor() as cursor:
                 
-                cursor.execute('DELETE FROM contests where unix_time_stamp>=FLOOR(EXTRACT(EPOCH FROM now()))::bigint;')
+                cursor.execute('DELETE FROM contests where unix_time_stamp<=FLOOR(EXTRACT(EPOCH FROM now()))::bigint;')
 
                 # cursor.execute('DELETE FROM contests;')
                     # deleteing all existing records from the table

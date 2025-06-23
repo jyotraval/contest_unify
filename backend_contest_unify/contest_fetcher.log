@@ -45,3 +45,11 @@ connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection re
 2025-06-12 17:39:16,607 - INFO - Fetched 8 AtCoder contests
 2025-06-12 17:39:16,978 - INFO - Initialized contests table
 2025-06-12 17:39:17,702 - INFO - 23 contest records retrieved from the database and displayed.
+2025-06-23 21:26:16,731 - INFO - Fetched 3 Codeforces contests
+2025-06-23 21:26:17,262 - INFO - Fetched 6 LeetCode contests
+2025-06-23 21:26:17,827 - INFO - Fetched 1 CodeChef contests
+2025-06-23 21:26:18,109 - INFO - Fetched 1 HackerEarth contests
+2025-06-23 21:26:18,604 - INFO - Fetched 4 AtCoder contests
+2025-06-23 21:26:18,844 - INFO - Initialized contests table
+2025-06-23 21:26:19,381 - INFO - Updated `contest_meta_refresh` with latest `contests` fetch timestamp.
+2025-06-23 21:26:19,880 - INFO - 18 contest records retrieved from the database and displayed.
