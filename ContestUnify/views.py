@@ -27,7 +27,18 @@ def show_contests(request):
         #     var['domain'] = site_logo_map.get(var['site'],'NA')
         # # print(contests)
 
-    return render(request, 'contests/index.html', {'contests': contests})
+        cursor.execute('''
+            SELECT date_trunc('second', human_read AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata') AS human_read_ist
+            FROM contest_meta_refresh;
+        ''')
+        lastrefresh = cursor.fetchone()
+        if lastrefresh and lastrefresh[0]:
+            lastrefresh = str(lastrefresh[0])
+        else:
+            lastrefresh = "N/A"
+
+
+    return render(request, 'contests/index.html', {'contests': contests, 'lastrefresh': lastrefresh})
 
 
 def chatbot(request):
@@ -53,3 +64,5 @@ def chatbot(request):
     return render(request, 'chatbot_index.html')
     
 
+def aboutus(request):
+    return render(request,'aboutus.html')

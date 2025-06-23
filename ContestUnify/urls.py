@@ -20,8 +20,9 @@ from django.urls import path, include
 from ContestUnify import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('', include('contest.urls')),  # use 'contest', not 'contests'
-    path('chatbot/',views.chatbot)
+    path('chatbot/',views.chatbot),
+    path('aboutus/',views.aboutus),
 ]
 

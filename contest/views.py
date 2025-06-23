@@ -30,10 +30,22 @@ def show_supabase_contests(request):
                     'domain':site_logo_map.get(row[0],'NA')
                 })
                 # print("Contests from Supabase:", contests)
+                cursor.execute('''
+                    SELECT date_trunc('second', human_read AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata') AS human_read_ist
+                    FROM contest_meta_refresh;
+                ''')
+                lastrefresh = cursor.fetchone()
+                if lastrefresh and lastrefresh[0]:
+                    lastrefresh = str(lastrefresh[0])
+                else:
+                    lastrefresh = "N/A"
+
+
             cursor.close()
         except Exception as e:
             print("Error fetching from Supabase:", e)
         finally:
             conn.close()
 
-    return render(request, 'index.html', {'contests': contests})
+    return render(request, 'index.html', {'contests': contests, 'lastrefresh': lastrefresh})
+    # return render(request, 'index.html', {'contests': contests})
